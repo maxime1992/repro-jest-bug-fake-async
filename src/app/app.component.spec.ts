@@ -1,31 +1,31 @@
-import { TestBed, async } from '@angular/core/testing';
+import {
+  TestBed,
+  async,
+  fakeAsync,
+  ComponentFixture,
+  tick,
+} from '@angular/core/testing';
 import { AppComponent } from './app.component';
 
 describe('AppComponent', () => {
+  let fixture: ComponentFixture<AppComponent>;
+  let app: AppComponent;
+
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [
-        AppComponent
-      ],
+      declarations: [AppComponent],
     }).compileComponents();
   }));
 
   it('should create the app', () => {
-    const fixture = TestBed.createComponent(AppComponent);
-    const app = fixture.debugElement.componentInstance;
+    fixture = TestBed.createComponent(AppComponent);
+    app = fixture.debugElement.componentInstance;
     expect(app).toBeTruthy();
   });
 
-  it(`should have as title 'repro-jest-bug-fake-async'`, () => {
-    const fixture = TestBed.createComponent(AppComponent);
-    const app = fixture.debugElement.componentInstance;
-    expect(app.title).toEqual('repro-jest-bug-fake-async');
-  });
-
-  it('should render title in a h1 tag', () => {
-    const fixture = TestBed.createComponent(AppComponent);
-    fixture.detectChanges();
-    const compiled = fixture.debugElement.nativeElement;
-    expect(compiled.querySelector('h1').textContent).toContain('Welcome to repro-jest-bug-fake-async!');
-  });
+  // following is not working
+  it('should change the title after 5s', fakeAsync(() => {
+    tick(5000);
+    expect(app.title).toBe('new title!');
+  }));
 });
